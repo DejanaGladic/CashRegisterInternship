@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashRegister.API", "CashRegister.API\CashRegister.API.csproj", "{193EE0A0-2A39-4164-B1DE-2E74B0EAAB9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashRegister.API", "CashRegister.API\CashRegister.API.csproj", "{193EE0A0-2A39-4164-B1DE-2E74B0EAAB9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashRegister.Application", "CashRegister.Application\CashRegister.Application.csproj", "{86185649-03D7-4931-9F1A-9D17C7405FF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashRegister.Application", "CashRegister.Application\CashRegister.Application.csproj", "{86185649-03D7-4931-9F1A-9D17C7405FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashRegister.Domain", "CashRegister.Domain\CashRegister.Domain.csproj", "{4FCC6F59-BFD0-4DB8-82D4-0D0A94CD2C2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashRegister.Domain", "CashRegister.Domain\CashRegister.Domain.csproj", "{4FCC6F59-BFD0-4DB8-82D4-0D0A94CD2C2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashRegister.Infrastructure", "CashRegister.Infrastructure\CashRegister.Infrastructure.csproj", "{2FEF46B6-48ED-4315-BCE3-6ACC56A70D09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashRegister.Infrastructure", "CashRegister.Infrastructure\CashRegister.Infrastructure.csproj", "{2FEF46B6-48ED-4315-BCE3-6ACC56A70D09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{FE110D06-1DAD-4ABD-AE39-16C26A41F44B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2FEF46B6-48ED-4315-BCE3-6ACC56A70D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FEF46B6-48ED-4315-BCE3-6ACC56A70D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FEF46B6-48ED-4315-BCE3-6ACC56A70D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE110D06-1DAD-4ABD-AE39-16C26A41F44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE110D06-1DAD-4ABD-AE39-16C26A41F44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE110D06-1DAD-4ABD-AE39-16C26A41F44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE110D06-1DAD-4ABD-AE39-16C26A41F44B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

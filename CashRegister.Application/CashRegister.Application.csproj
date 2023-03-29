@@ -19,4 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CashRegister.Domain\CashRegister.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

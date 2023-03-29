@@ -18,6 +18,11 @@ namespace CashRegister.Infrastructure.Repositories
             return await _cashRegisterDbContext.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByStringId(string id)
+        {
+            return await _cashRegisterDbContext.Set<T>().FindAsync(id);
+        }
+
         public async Task<IEnumerable<T>> GetAll()
         {
             return await _cashRegisterDbContext.Set<T>().ToListAsync();

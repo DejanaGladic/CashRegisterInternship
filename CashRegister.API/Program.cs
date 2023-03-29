@@ -23,11 +23,12 @@ builder.Services.AddDbContext<CashRegisterDBContext>(options =>
     ));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IBillService, BillService>();
+
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBillRepository, BillRepository>();
 builder.Services.AddScoped<IProductBillRepository, ProductBillRepository>();
-
-builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

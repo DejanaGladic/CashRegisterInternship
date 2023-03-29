@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
-using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -44,13 +43,28 @@ namespace CashRegister.API.Controllers
                 var isBillUpdated = await _billService.UpdateBill(bill);
                 if (isBillUpdated)
                 {
-                    return Ok(isBillUpdated);
+                    return Ok("Bill has been updated");
                 }
-                return BadRequest();
+                return BadRequest("Bill has not been updated");
             }
             else
             {
                 return BadRequest();
+            }
+        }
+
+        [HttpDelete("{billNumber}")]
+        public async Task<IActionResult> DeleteBill(string billNumber)
+        {
+            var isBillDeleted = await _billService.DeleteBill(billNumber);
+
+            if (isBillDeleted)
+            {
+                return Ok("Bill has been deleted");
+            }
+            else
+            {
+                return BadRequest("Bill has not been deleted");
             }
         }
     }

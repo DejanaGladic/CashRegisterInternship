@@ -6,5 +6,7 @@ namespace CashRegister.Application.ServiceInterfaces
     {
         Task<bool> CreateBill(Bill bill);
         Task<bool> UpdateBill(Bill bill);
+
+        Task<bool> DeleteBill(string billNumber);
     }
 }

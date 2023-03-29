@@ -18,13 +18,14 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "CashRegister.API", Version = "v1" });
 });
 
-builder.Services.AddDbContext<CashRegisterDBContext>(options =>
+builder.Services.AddDbContext < CashRegisterDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CashRegisterDBConnection")
     ));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IProductBillService, ProductBillService>();
 
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBillRepository, BillRepository>();

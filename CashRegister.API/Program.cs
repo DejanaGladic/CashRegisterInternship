@@ -29,6 +29,8 @@ builder.Services.AddScoped<IProductBillRepository, ProductBillRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

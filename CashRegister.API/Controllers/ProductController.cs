@@ -1,4 +1,6 @@
-﻿using CashRegister.Application.ServiceInterfaces;
+﻿using AutoMapper;
+using CashRegister.Application.DTO;
+using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +11,11 @@ namespace CashRegister.API.Controllers
     public class ProductController : ControllerBase
     {
         public IProductService _productService;
-        public ProductController(IProductService productService)
+        public IMapper _mapper;
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,7 +26,7 @@ namespace CashRegister.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(productsList);
+            return Ok(_mapper.Map<IEnumerable<ProductDTO>>(productsList));
         }
 
         [HttpGet("{productId}")]
@@ -41,8 +45,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
         {
+            var product = _mapper.Map<Product>(productDTO);
             var isProductCreated = await _productService.CreateProduct(product);
 
             if (isProductCreated)

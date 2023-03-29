@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CashRegister.Application.DTO;
 using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,28 @@ namespace CashRegister.API.Controllers
         {
             _billService = billService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBillList()
+        {
+            var billList = await _billService.GetAllBills();
+            if (billList == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<IEnumerable<BillDTO>>(billList));
+        }
+
+        [HttpGet("{billNumber}")]
+        public async Task<IActionResult> GetBillById(string billNumber)
+        {
+            var bill = await _billService.GetBillById(billNumber);
+            if (bill == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<BillDTO>(bill));
         }
 
         [HttpPost]

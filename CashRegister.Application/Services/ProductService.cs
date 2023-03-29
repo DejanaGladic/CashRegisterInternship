@@ -65,6 +65,16 @@ namespace CashRegister.Application.Services
             return null;
         }
 
+        public bool IfProductByIdExists(int productId)
+        {
+            if (productId > 0)
+            {
+                var result = _unitOfWork.ProductRepository.IfExistsById(productId);
+                return result;
+            }
+            return false;
+        }
+
         public async Task<bool> UpdateProduct(Product product)
         {
             if (product != null)

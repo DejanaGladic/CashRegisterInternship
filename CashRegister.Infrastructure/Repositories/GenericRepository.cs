@@ -42,5 +42,22 @@ namespace CashRegister.Infrastructure.Repositories
         {
             _cashRegisterDbContext.Set<T>().Update(entity);
         }
+
+        public bool IfExistsById(int id)
+        {
+            var obj = _cashRegisterDbContext.Set<T>().Find(id);
+            if (obj != null)
+                return true;
+            return false;
+
+        }
+
+        public bool IfExistsByStringId(string id)
+        {
+            var obj = _cashRegisterDbContext.Set<T>().Find(id);
+            if (obj != null)
+                return true;
+            return false;
+        }
     }
 }

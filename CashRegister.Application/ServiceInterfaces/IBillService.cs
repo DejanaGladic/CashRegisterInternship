@@ -10,5 +10,7 @@ namespace CashRegister.Application.ServiceInterfaces
         Task<IEnumerable<Bill>> GetAllBills();
 
         Task<Bill> GetBillById(string billNumber);
+
+        bool IfBillByIdExists(string billNumber);
     }
 }

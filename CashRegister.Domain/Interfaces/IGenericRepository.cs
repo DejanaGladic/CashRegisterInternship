@@ -4,6 +4,9 @@
     {
         Task<T> GetById(int id);
         Task<T> GetByStringId(string id);
+
+        bool IfExistsById(int id);
+        bool IfExistsByStringId(string id);
         Task<IEnumerable<T>> GetAll();
         Task Add(T entity);
         void Delete(T entity);

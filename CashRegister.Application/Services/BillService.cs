@@ -95,5 +95,15 @@ namespace CashRegister.Application.Services
             }
             return null;
         }
+
+        public bool IfBillByIdExists(string billNumber)
+        {
+            if (billNumber != null)
+            {
+                var result = _unitOfWork.BillRepository.IfExistsByStringId(billNumber);
+                return result;
+            }
+            return false;
+        }
     }
 }

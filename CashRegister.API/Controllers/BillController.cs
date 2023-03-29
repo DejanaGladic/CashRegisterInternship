@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using CashRegister.Application.DTO;
 using CashRegister.Application.ServiceInterfaces;
-using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;

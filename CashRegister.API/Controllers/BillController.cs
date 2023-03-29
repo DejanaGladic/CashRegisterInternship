@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CashRegister.Application.DTO;
 using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +32,25 @@ namespace CashRegister.API.Controllers
             else
             {
                 return BadRequest("Bill has not been created");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateBill(BillDTO billDTO)
+        {
+            var bill = _mapper.Map<Bill>(billDTO);
+            if (bill != null)
+            {
+                var isBillUpdated = await _billService.UpdateBill(bill);
+                if (isBillUpdated)
+                {
+                    return Ok(isBillUpdated);
+                }
+                return BadRequest();
+            }
+            else
+            {
+                return BadRequest();
             }
         }
     }

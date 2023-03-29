@@ -30,5 +30,32 @@ namespace CashRegister.Application.Services
             }
             return false;
         }
+
+        public async Task<bool> UpdateBill(Bill bill)
+        {
+            if (bill != null)
+            {
+                //preuzimanje direktne reference na objekat koji menjamo
+                var returnedBill = await _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
+
+                if (returnedBill != null)
+                {
+                    returnedBill.BillNumber = bill.BillNumber;
+                    returnedBill.PaymentMethod = bill.PaymentMethod;
+                    returnedBill.TotalPrice = bill.TotalPrice;
+                    returnedBill.CreditCardNumber = bill.CreditCardNumber;
+
+                    _unitOfWork.BillRepository.Update(returnedBill);
+
+                    var result = _unitOfWork.Save();
+
+                    if (result > 0)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            return false;
+        }
     }
 }

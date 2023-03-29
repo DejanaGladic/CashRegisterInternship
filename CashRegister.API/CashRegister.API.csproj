@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CashRegister.Application\CashRegister.Application.csproj" />
     <ProjectReference Include="..\CashRegister.Infrastructure\CashRegister.Infrastructure.csproj" />
   </ItemGroup>
 

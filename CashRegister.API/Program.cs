@@ -3,6 +3,8 @@ using CashRegister.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Infrastructure.Repositories;
+using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBillRepository, BillRepository>();
 builder.Services.AddScoped<IProductBillRepository, ProductBillRepository>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

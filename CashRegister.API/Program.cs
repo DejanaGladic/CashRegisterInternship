@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
 using CashRegister.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using CashRegister.Domain.Interfaces;
+using CashRegister.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,11 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<CashRegisterDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CashRegisterDBConnection")
     ));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IBillRepository, BillRepository>();
+builder.Services.AddScoped<IProductBillRepository, ProductBillRepository>();
 
 var app = builder.Build();
 

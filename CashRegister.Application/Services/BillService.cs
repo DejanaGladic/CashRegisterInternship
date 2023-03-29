@@ -57,5 +57,24 @@ namespace CashRegister.Application.Services
             }
             return false;
         }
+
+        public async Task<bool> DeleteBill(string billNumber)
+        {
+            if (billNumber != null)
+            {
+                var bill = await _unitOfWork.BillRepository.GetByStringId(billNumber);
+                if (bill != null)
+                {
+                    _unitOfWork.BillRepository.Delete(bill);
+                    var result = _unitOfWork.Save();
+
+                    if (result > 0)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            return false;
+        }
     }
 }

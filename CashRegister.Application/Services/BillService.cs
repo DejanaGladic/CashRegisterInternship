@@ -76,5 +76,24 @@ namespace CashRegister.Application.Services
             }
             return false;
         }
+
+        public async Task<IEnumerable<Bill>> GetAllBills()
+        {
+            var billLists = await _unitOfWork.BillRepository.GetAll();
+            return billLists;
+        }
+
+        public async Task<Bill> GetBillById(string billNumber)
+        {
+            if (billNumber != null)
+            {
+                var bill = await _unitOfWork.BillRepository.GetByStringId(billNumber);
+                if (bill != null)
+                {
+                    return bill;
+                }
+            }
+            return null;
+        }
     }
 }

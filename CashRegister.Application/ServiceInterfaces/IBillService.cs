@@ -15,6 +15,6 @@ namespace CashRegister.Application.ServiceInterfaces
 
         bool IfBillByIdExists(string billNumber);
 
-        void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation);
+        int CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation);
     }
 }

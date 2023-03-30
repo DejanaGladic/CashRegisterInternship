@@ -125,7 +125,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation) {
+        public int CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation) {
 
             var returnedBill = GetBillById(productBill.BillNumber);
             var initialValue = returnedBill.TotalPrice;
@@ -140,6 +140,8 @@ namespace CashRegister.Application.Services
             if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
                 returnedBill.TotalPrice = calculatedTotalPrice;
             }
+
+            return returnedBill.TotalPrice;
         }
 
         public Bill GetBillExchangeRate(string billNumber, string exchangeRate)

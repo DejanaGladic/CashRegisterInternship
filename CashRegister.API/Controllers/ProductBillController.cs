@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Application.Services;
+using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashRegister.API.Controllers
@@ -11,43 +13,38 @@ namespace CashRegister.API.Controllers
     [ApiController]
     public class ProductBillController : ControllerBase
     {
-        public IProductBillService _productBillService;
+       /* public IProductBillService _productBillService;
         public IMapper _mapper;
         public ProductBillController(IProductBillService productBillService, IMapper mapper)
         {
             _productBillService = productBillService;
             _mapper = mapper;
+        }*/
+
+        private IMediator _mediator;
+        public ProductBillController(IMediator mediator)
+        {
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProductBill(ProductBillPostPutDTO productBillPostPutDTO)
         {
-            var bill = _mapper.Map<ProductBill>(productBillPostPutDTO);
-            var isProductBillCreated = await _productBillService.CreateProductBill(bill);
+            var query = new CreateProductBillCommand(productBillPostPutDTO);
+            var result = await _mediator.Send(query);
 
-            if (isProductBillCreated)
-            {
-                return Created("/productBill", "Product bill has been created");
-            }
-            else
-            {
-                return BadRequest("Product bill has not been created");
-            }
+            return result ? Created("/bill", "Product bill has been created") 
+                : BadRequest("Product bill has not been created");
+
         }
 
         [HttpDelete("/{billNumber}/{productId}")]
-        public IActionResult DeleteProductBill(string billNumber, int productId)
+        public async Task<IActionResult> DeleteProductBill(string billNumber, int productId)
         {
-            var isBillProductDeleted = _productBillService.DeleteProductBill(billNumber, productId);
+            var query = new DeleteProductBillCommand(billNumber, productId);
+            var result = await _mediator.Send(query);
 
-            if (isBillProductDeleted)
-            {
-                return Ok("Product has been deleted");
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return result ? Ok("Product has been deleted") : BadRequest("Product has not been deleted");
         }
     }
 }

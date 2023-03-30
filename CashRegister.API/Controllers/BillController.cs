@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
-using CashRegister.Application.Services;
 using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
-using CashRegister.Domain.Models;
 using CashRegister.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -57,46 +55,31 @@ namespace CashRegister.API.Controllers
             var result = await _mediator.Send(query);
 
             return result ? Ok("Bill has been updated") : BadRequest("Bill has not been updated");
-            /*var bill = _mapper.Map<Bill>(billPostPutDTO);
-            if (bill != null)
-            {
-                var isBillUpdated = _billService.UpdateBill(bill);
-                if (isBillUpdated)
-                {
-                    return Ok("Bill has been updated");
-                }
-                return BadRequest("Bill has not been updated");
-            }
-            else
-            {
-                return BadRequest();
-            }*/
         }
 
         [HttpDelete("{billNumber}")]
-        public IActionResult DeleteBill(string billNumber)
+        public async Task<IActionResult> DeleteBill(string billNumber)
         {
-            var isBillDeleted = _billService.DeleteBill(billNumber);
+            var query = new DeleteBillCommand(billNumber);
+            var result = await _mediator.Send(query);
 
-            if (isBillDeleted)
-            {
-                return Ok("Bill has been deleted");
-            }
-            else
-            {
-                return BadRequest("Bill has not been deleted");
-            }
+            return result ? Ok("Bill has been deleted") : BadRequest("Bill has not been deleted");
         }
 
         [HttpGet("{billNumber}/{exchangeRate}")]
-        public IActionResult GetBillExchangeRate(string billNumber, string exchangeRate)
+        public async Task<IActionResult> GetBillExchangeRate(string billNumber, string exchangeRate)
         {
-            var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
+            var query = new GetBillExchangeRateQuery(billNumber, exchangeRate);
+            var result = await _mediator.Send(query);
+
+            return result != null ? Ok(result) : NotFound();
+
+           /* var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
             if (bill == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<BillDTO>(bill));
+            return Ok(_mapper.Map<BillDTO>(bill));*/
         }
     }
 }

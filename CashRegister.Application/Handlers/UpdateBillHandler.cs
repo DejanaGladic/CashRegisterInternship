@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Domain.Commands;
-using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
-using CashRegister.Domain.Queries;
 using MediatR;
 
 namespace CashRegister.Domain.Handlers
@@ -16,13 +14,6 @@ namespace CashRegister.Domain.Handlers
         {
             _billService = billService;
             _mapper = mapper;
-        }
-
-        public Task<bool> Handle(CreateBillCommand request, CancellationToken cancellationToken)
-        {
-            var bill = _mapper.Map<Bill>(request._billDTO);
-            var isBillCreated = _billService.CreateBill(bill);
-            return isBillCreated;
         }
 
         public Task<bool> Handle(UpdateBillCommand request, CancellationToken cancellationToken)

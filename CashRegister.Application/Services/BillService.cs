@@ -24,7 +24,8 @@ namespace CashRegister.Application.Services
                     return false;
                 }
 
-                if(!_validationService.IsValidBillNumber(bill.BillNumber)){               
+                if(!_validationService.IsValidBillNumber(bill.BillNumber) || 
+                    !_validationService.isValidCreditCard(bill.CreditCardNumber)){               
                     return false;
                 }
 
@@ -49,7 +50,8 @@ namespace CashRegister.Application.Services
 
                 if (returnedBill != null)
                 {
-                    if (!_validationService.IsValidBillNumber(bill.BillNumber))
+                    if (!_validationService.IsValidBillNumber(bill.BillNumber) ||
+                        !_validationService.isValidCreditCard(bill.CreditCardNumber))
                     {
                         return false;
                     }

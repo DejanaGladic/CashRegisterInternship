@@ -4,6 +4,7 @@ namespace CashRegister.Application.Services
 {
     public class ValidationService
     {
+        const int _upperLimit = 50000;
         public bool IsValidBillNumber(string billNumber)
         {
             Regex regex = new Regex(@"^\d{3}-\d{13}-\d{2}$");
@@ -83,6 +84,12 @@ namespace CashRegister.Application.Services
             int endResult = result + multipliedDigitsSummed;
             bool isValidCard = endResult % 10 == 0;
             return isValidCard;
+        }
+
+        public bool IsUpperLimitOverDrawn(int upperLimit) { 
+            if(upperLimit > _upperLimit)
+                return true;
+            return false;
         }
     }
 }

@@ -42,9 +42,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBill(BillDTO billDTO)
+        public async Task<IActionResult> CreateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billDTO);
+            var bill = _mapper.Map<Bill>(billPostPutDTO);
             var isBillCreated = await _billService.CreateBill(bill);
 
             if (isBillCreated)
@@ -58,9 +58,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBill(BillDTO billDTO)
+        public async Task<IActionResult> UpdateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billDTO);
+            var bill = _mapper.Map<Bill>(billPostPutDTO);
             if (bill != null)
             {
                 var isBillUpdated = await _billService.UpdateBill(bill);

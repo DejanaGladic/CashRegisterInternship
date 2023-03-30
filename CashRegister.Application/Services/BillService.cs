@@ -57,7 +57,6 @@ namespace CashRegister.Application.Services
                     }
                     returnedBill.BillNumber = bill.BillNumber;
                     returnedBill.PaymentMethod = bill.PaymentMethod;
-                    returnedBill.TotalPrice = bill.TotalPrice;
                     returnedBill.CreditCardNumber = bill.CreditCardNumber;
 
                     _unitOfWork.BillRepository.Update(returnedBill);
@@ -132,10 +131,15 @@ namespace CashRegister.Application.Services
             var initialValue = returnedProductBill.TotalPrice;
             var value = productBill.ProductsPrice;
 
+            int calculatedTotalPrice = 0;
             if(typeOfCalculation == "adds")
-                returnedProductBill.TotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
+                calculatedTotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
             else if(typeOfCalculation == "subtract")
-                returnedProductBill.TotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
+                calculatedTotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
+
+            if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
+                returnedProductBill.TotalPrice = calculatedTotalPrice;
+            }
         }
 
 

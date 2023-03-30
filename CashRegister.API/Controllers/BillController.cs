@@ -51,9 +51,13 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateBill(BillPostPutDTO billPostPutDTO)
+        public async Task<IActionResult> UpdateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billPostPutDTO);
+            var query = new UpdateBillCommand(billPostPutDTO);
+            var result = await _mediator.Send(query);
+
+            return result ? Ok("Bill has been updated") : BadRequest("Bill has not been updated");
+            /*var bill = _mapper.Map<Bill>(billPostPutDTO);
             if (bill != null)
             {
                 var isBillUpdated = _billService.UpdateBill(bill);
@@ -66,7 +70,7 @@ namespace CashRegister.API.Controllers
             else
             {
                 return BadRequest();
-            }
+            }*/
         }
 
         [HttpDelete("{billNumber}")]

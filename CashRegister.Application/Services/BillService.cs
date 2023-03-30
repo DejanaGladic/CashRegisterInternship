@@ -6,14 +6,16 @@ namespace CashRegister.Application.Services
 {
     public class BillService : IBillService
     {
-        public IUnitOfWork _unitOfWork;
-        public BillService(IUnitOfWork unitOfWork)
+        private IUnitOfWork _unitOfWork;
+        private ICalculator _calculator;
+        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator)
         {
             _unitOfWork = unitOfWork;
+            _calculator = calculator;
         }
         public async Task<bool> CreateBill(Bill bill)
         {
-            var ifBillExists = await _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
+            var ifBillExists = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
             if (bill != null)
             {
                 if (ifBillExists != null) {
@@ -36,7 +38,7 @@ namespace CashRegister.Application.Services
             if (bill != null)
             {
                 //preuzimanje direktne reference na objekat koji menjamo
-                var returnedBill = await _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
+                var returnedBill = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
 
                 if (returnedBill != null)
                 {
@@ -62,7 +64,7 @@ namespace CashRegister.Application.Services
         {
             if (billNumber != null)
             {
-                var bill = await _unitOfWork.BillRepository.GetByStringId(billNumber);
+                var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {
                     _unitOfWork.BillRepository.Delete(bill);
@@ -83,11 +85,11 @@ namespace CashRegister.Application.Services
             return billLists;
         }
 
-        public async Task<Bill> GetBillById(string billNumber)
+        public Bill GetBillById(string billNumber)
         {
             if (billNumber != null)
             {
-                var bill = await _unitOfWork.BillRepository.GetByStringId(billNumber);
+                var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {
                     return bill;
@@ -105,5 +107,19 @@ namespace CashRegister.Application.Services
             }
             return false;
         }
+
+        public void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation) {
+
+            var returnedProductBill = GetBillById(productBill.BillNumber);
+            var initialValue = returnedProductBill.TotalPrice;
+            var value = productBill.ProductsPrice;
+
+            if(typeOfCalculation == "adds")
+                productBill.Bill.TotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
+            else if(typeOfCalculation == "subtract")
+                returnedProductBill.TotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,21 @@ namespace CashRegister.API.Controllers
             else
             {
                 return BadRequest("Product bill has not been created");
+            }
+        }
+
+        [HttpDelete("/{billNumber}/{productId}")]
+        public async Task<IActionResult> DeleteProductBill(string billNumber, int productId)
+        {
+            var isBillProductDeleted = await _productBillService.DeleteProductBill(billNumber, productId);
+
+            if (isBillProductDeleted)
+            {
+                return Ok("Product has been deleted");
+            }
+            else
+            {
+                return BadRequest();
             }
         }
     }

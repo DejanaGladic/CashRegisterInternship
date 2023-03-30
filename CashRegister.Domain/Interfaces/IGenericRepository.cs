@@ -3,7 +3,7 @@
     public interface IGenericRepository<T> where T : class
     {
         Task<T> GetById(int id);
-        Task<T> GetByStringId(string id);
+        T GetByStringId(string id);
 
         bool IfExistsById(int id);
         bool IfExistsByStringId(string id);

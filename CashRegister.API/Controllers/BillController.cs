@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace CashRegister.API.Controllers
         [HttpGet("{billNumber}")]
         public async Task<IActionResult> GetBillById(string billNumber)
         {
-            var bill = await _billService.GetBillById(billNumber);
+            var bill = _billService.GetBillById(billNumber);
             if (bill == null)
             {
                 return NotFound();

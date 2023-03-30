@@ -8,7 +8,11 @@ namespace CashRegister.Infrastructure.Repositories
     {
         public ProductBillRepository(CashRegisterDBContext dbContext) : base(dbContext)
         {
+        }
 
+        public ProductBill GetByProductAndBill(string billNumber, int productId)
+        {
+            return _cashRegisterDbContext.Set<ProductBill>().Find(billNumber, productId);
         }
     }
 }

@@ -6,5 +6,7 @@ namespace CashRegister.Application.ServiceInterfaces
     {
         Task<bool> CreateProductBill(ProductBill _productBill);
         Task<bool> UpdateProductBill(ProductBill _productBill);
+
+        Task<bool> DeleteProductBill(string billNumber, int productId);
     }
 }

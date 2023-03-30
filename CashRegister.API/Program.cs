@@ -26,6 +26,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBillService, BillService>();
 builder.Services.AddScoped<IProductBillService, ProductBillService>();
+builder.Services.AddScoped<ICalculator, Calculator>();
 
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBillRepository, BillRepository>();

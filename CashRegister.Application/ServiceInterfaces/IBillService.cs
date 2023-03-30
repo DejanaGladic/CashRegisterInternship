@@ -9,8 +9,10 @@ namespace CashRegister.Application.ServiceInterfaces
         Task<bool> DeleteBill(string billNumber);
         Task<IEnumerable<Bill>> GetAllBills();
 
-        Task<Bill> GetBillById(string billNumber);
+        Bill GetBillById(string billNumber);
 
         bool IfBillByIdExists(string billNumber);
+
+        void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation);
     }
 }

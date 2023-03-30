@@ -1,34 +1,40 @@
 ﻿using CashRegister.Application.ServiceInterfaces;
+using CashRegister.Domain.Commands;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Domain.Models;
+using CashRegister.Domain.Queries;
+using MediatR;
 
 namespace CashRegister.Application.Services
 {
     public class ProductBillService : IProductBillService
     {
         private IUnitOfWork _unitOfWork;
-        private IProductService _productService;
-        private IBillService _billService;
         private ICalculator _calculator;
+        private IMediator _mediator;
         public ProductBillService(IUnitOfWork unitOfWork, IProductService productService, IBillService billService,
-            ICalculator calculator)
+            ICalculator calculator, IMediator mediator)
         {
             _unitOfWork = unitOfWork;
-            _productService = productService;
-            _billService = billService;
             _calculator = calculator;
+            _mediator = mediator;
         }
         public async Task<bool> CreateProductBill(ProductBill productBill)
         {
-            var ifProductExists = _productService.IfProductByIdExists(productBill.ProductId);
-            var ifBillExists =  _billService.IfBillByIdExists(productBill.BillNumber);
+            var ifProductExists = new GetProductByIdQuery(productBill.ProductId);
+            var product = await _mediator.Send(ifProductExists);
 
-            if (!ifProductExists || !ifBillExists)
+            var ifBillExists = new GetBillByIdQuery(productBill.BillNumber);
+            var bill = await _mediator.Send(ifBillExists);
+
+            if (product == null || bill == null)
                 return false;
             else {
 
-                var productForProductBill = _productService.GetProductById(productBill.ProductId);
-                var productsPrice = _calculator.MultiplyOperation(productForProductBill.Price, productBill.ProductQuantity);
+                var query = new GetProductByIdQuery(productBill.ProductId);
+                var queryResult = await _mediator.Send(query);
+
+                var productsPrice = _calculator.MultiplyOperation(queryResult.Price, productBill.ProductQuantity);
                 productBill.ProductsPrice = (int)productsPrice;
 
                 if (!_unitOfWork.ProductBillsRepository.IfObjectExists(productBill))
@@ -40,7 +46,8 @@ namespace CashRegister.Application.Services
                     UpdateProductBill(productBill, true);
                 }
 
-                _billService.CalculateTotalBillPrice(productBill, "adds");
+                var calculateQuery = new CalculateBillPriceCommand(productBill, "adds");
+                await _mediator.Send(calculateQuery);
 
                 var result = _unitOfWork.Save();
                 if (result > 0) {                   
@@ -95,7 +102,9 @@ namespace CashRegister.Application.Services
 
                 if (productBill != null)
                 {
-                    _billService.CalculateTotalBillPrice(productBill, "subtract");
+                    var calculateQuery = new CalculateBillPriceCommand(productBill, "adds");
+                    _mediator.Send(calculateQuery);
+
                     _unitOfWork.ProductBillsRepository.Delete(productBill);
                     var result = _unitOfWork.Save();
                     

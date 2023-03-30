@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Domain.Commands;
-using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
-using CashRegister.Domain.Queries;
 using MediatR;
 
 namespace CashRegister.Domain.Handlers

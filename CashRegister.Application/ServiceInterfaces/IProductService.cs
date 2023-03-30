@@ -11,8 +11,8 @@ namespace CashRegister.Application.ServiceInterfaces
         Product GetProductById(int productId);
         bool IfProductByIdExists(int productId);
 
-        Task<bool> UpdateProduct(Product productDetails);
+        bool UpdateProduct(Product productDetails);
 
-        Task<bool> DeleteProduct(int productId);
+        bool DeleteProduct(int productId);
     }
 }

@@ -35,12 +35,12 @@ namespace CashRegister.Infrastructure.Repositories
 
         public void Delete(T entity)
         {
-            _cashRegisterDbContext.Set<T>().Remove(entity);
+             _cashRegisterDbContext.Set<T>().Remove(entity);
         }
 
         public void Update(T entity)
         {
-            _cashRegisterDbContext.Set<T>().Update(entity);
+             _cashRegisterDbContext.Set<T>().Update(entity);
         }
 
         public bool IfExistsById(int id)

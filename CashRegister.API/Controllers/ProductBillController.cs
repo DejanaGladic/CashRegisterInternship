@@ -36,9 +36,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpDelete("/{billNumber}/{productId}")]
-        public async Task<IActionResult> DeleteProductBill(string billNumber, int productId)
+        public IActionResult DeleteProductBill(string billNumber, int productId)
         {
-            var isBillProductDeleted = await _productBillService.DeleteProductBill(billNumber, productId);
+            var isBillProductDeleted = _productBillService.DeleteProductBill(billNumber, productId);
 
             if (isBillProductDeleted)
             {

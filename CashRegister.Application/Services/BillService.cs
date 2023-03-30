@@ -41,7 +41,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> UpdateBill(Bill bill)
+        public bool UpdateBill(Bill bill)
         {
             if (bill != null)
             {
@@ -72,7 +72,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> DeleteBill(string billNumber)
+        public bool DeleteBill(string billNumber)
         {
             if (billNumber != null)
             {
@@ -127,8 +127,8 @@ namespace CashRegister.Application.Services
 
         public void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation) {
 
-            var returnedProductBill = GetBillById(productBill.BillNumber);
-            var initialValue = returnedProductBill.TotalPrice;
+            var returnedBill = GetBillById(productBill.BillNumber);
+            var initialValue = returnedBill.TotalPrice;
             var value = productBill.ProductsPrice;
 
             int calculatedTotalPrice = 0;
@@ -138,7 +138,7 @@ namespace CashRegister.Application.Services
                 calculatedTotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
 
             if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
-                returnedProductBill.TotalPrice = calculatedTotalPrice;
+                returnedBill.TotalPrice = calculatedTotalPrice;
             }
         }
 

@@ -27,21 +27,19 @@ namespace CashRegister.Application.Services
                 return false;
             else {
 
-                if (_unitOfWork.ProductBillsRepository.IfObjectExists(productBill))
-                {
-                    var existingProductBill = _unitOfWork.ProductBillsRepository.GetByProductAndBill(productBill.BillNumber, productBill.ProductId);
-                    var calculatedQuantity = _calculator.AdditionOperation(existingProductBill.ProductQuantity, productBill.ProductQuantity);
-                    existingProductBill.ProductQuantity = (int)calculatedQuantity;
-                    _unitOfWork.ProductBillsRepository.Update(existingProductBill);
-
-                }
-                else {
-                    await _unitOfWork.ProductBillsRepository.Add(productBill);       
-                }
-
                 var productForProductBill = _productService.GetProductById(productBill.ProductId);
                 var productsPrice = _calculator.MultiplyOperation(productForProductBill.Price, productBill.ProductQuantity);
                 productBill.ProductsPrice = (int)productsPrice;
+
+                if (!_unitOfWork.ProductBillsRepository.IfObjectExists(productBill))
+                {                    
+                    await _unitOfWork.ProductBillsRepository.Add(productBill);                    
+                }
+                else
+                {
+                    UpdateProductBill(productBill, true);
+                }
+
                 _billService.CalculateTotalBillPrice(productBill, "adds");
 
                 var result = _unitOfWork.Save();
@@ -49,12 +47,47 @@ namespace CashRegister.Application.Services
                     return true;
                 }                  
                 else
-                    return false;              
+                    return false;
             }           
 
         }
 
-        public async Task<bool> DeleteProductBill(string billNumber, int productId)
+        public bool UpdateProductBill(ProductBill productBill, bool isFromCreation)
+        {
+            if (productBill != null)
+            {
+                //preuzimanje direktne reference na objekat koji menjamo
+                var returnedProductBill = _unitOfWork.ProductBillsRepository.GetByProductAndBill(productBill.BillNumber, productBill.ProductId);
+
+                if (returnedProductBill != null)
+                {
+                    returnedProductBill.ProductId = productBill.ProductId;
+                    returnedProductBill.BillNumber = productBill.BillNumber;
+
+                    if (isFromCreation)
+                    {
+                        returnedProductBill.ProductQuantity += productBill.ProductQuantity;
+                        returnedProductBill.ProductsPrice += productBill.ProductsPrice;
+                    }
+                    else {
+                        returnedProductBill.ProductQuantity = productBill.ProductQuantity;
+                        returnedProductBill.ProductsPrice = productBill.ProductsPrice;
+                    }
+                        
+                    _unitOfWork.ProductBillsRepository.Update(returnedProductBill);
+
+                    var result = _unitOfWork.Save();
+
+                    if (result > 0)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        public bool DeleteProductBill(string billNumber, int productId)
         {
             if (productId > 0 && billNumber != null)
             {

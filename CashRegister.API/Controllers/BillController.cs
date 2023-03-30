@@ -31,7 +31,7 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpGet("{billNumber}")]
-        public async Task<IActionResult> GetBillById(string billNumber)
+        public  IActionResult GetBillById(string billNumber)
         {
             var bill = _billService.GetBillById(billNumber);
             if (bill == null)
@@ -58,12 +58,12 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBill(BillPostPutDTO billPostPutDTO)
+        public IActionResult UpdateBill(BillPostPutDTO billPostPutDTO)
         {
             var bill = _mapper.Map<Bill>(billPostPutDTO);
             if (bill != null)
             {
-                var isBillUpdated = await _billService.UpdateBill(bill);
+                var isBillUpdated = _billService.UpdateBill(bill);
                 if (isBillUpdated)
                 {
                     return Ok("Bill has been updated");
@@ -77,9 +77,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpDelete("{billNumber}")]
-        public async Task<IActionResult> DeleteBill(string billNumber)
+        public IActionResult DeleteBill(string billNumber)
         {
-            var isBillDeleted = await _billService.DeleteBill(billNumber);
+            var isBillDeleted = _billService.DeleteBill(billNumber);
 
             if (isBillDeleted)
             {
@@ -92,7 +92,7 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpGet("{billNumber}/{exchangeRate}")]
-        public async Task<IActionResult> GetBillExchangeRate(string billNumber, string exchangeRate)
+        public IActionResult GetBillExchangeRate(string billNumber, string exchangeRate)
         {
             var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
             if (bill == null)

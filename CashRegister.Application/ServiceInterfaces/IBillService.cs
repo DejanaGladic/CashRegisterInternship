@@ -11,6 +11,8 @@ namespace CashRegister.Application.ServiceInterfaces
 
         Bill GetBillById(string billNumber);
 
+        Bill GetBillExchangeRate(string billNumber, string exchangeRate);
+
         bool IfBillByIdExists(string billNumber);
 
         void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation);

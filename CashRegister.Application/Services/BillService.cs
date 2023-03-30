@@ -142,6 +142,15 @@ namespace CashRegister.Application.Services
             }
         }
 
+        public Bill GetBillExchangeRate(string billNumber, string exchangeRate)
+        {
+            var returnedProductBill = GetBillById(billNumber);
+            if (returnedProductBill == null)
+                return null;
 
+            var value = _calculator.moneyConversion(returnedProductBill.TotalPrice, exchangeRate);
+            returnedProductBill.TotalPrice = value;
+            return returnedProductBill;
+        }
     }
 }

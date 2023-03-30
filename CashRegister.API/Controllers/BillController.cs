@@ -90,5 +90,16 @@ namespace CashRegister.API.Controllers
                 return BadRequest("Bill has not been deleted");
             }
         }
+
+        [HttpGet("{billNumber}/{exchangeRate}")]
+        public async Task<IActionResult> GetBillExchangeRate(string billNumber, string exchangeRate)
+        {
+            var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
+            if (bill == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<BillDTO>(bill));
+        }
     }
 }

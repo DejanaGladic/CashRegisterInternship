@@ -9,11 +9,13 @@ namespace CashRegister.Application.Services
         private IUnitOfWork _unitOfWork;
         private IProductService _productService;
         private IBillService _billService;
-        public ProductBillService(IUnitOfWork unitOfWork, IProductService productService, IBillService billService)
+        private ICalculator _calculator;
+        public ProductBillService(IUnitOfWork unitOfWork, IProductService productService, IBillService billService, ICalculator calculator)
         {
             _unitOfWork = unitOfWork;
             _productService = productService;
             _billService = billService;
+            _calculator = calculator;
         }
         public async Task<bool> CreateProductBill(ProductBill productBill)
         {
@@ -23,21 +25,64 @@ namespace CashRegister.Application.Services
             if (!ifProductExists || !ifBillExists)
                 return false;
             else {
-                await _unitOfWork.ProductBillsRepository.Add(productBill);
+
+                if (_unitOfWork.ProductBillsRepository.IfObjectExists(productBill))
+                {
+                    var existingProductBill = _unitOfWork.ProductBillsRepository.GetByProductAndBill(productBill.BillNumber, productBill.ProductId);
+                    var calculatedQuantity = _calculator.AdditionOperation(existingProductBill.ProductQuantity, productBill.ProductQuantity);
+                    existingProductBill.ProductQuantity = (int)calculatedQuantity;
+                    _unitOfWork.ProductBillsRepository.Update(existingProductBill);
+
+                }
+                else {
+                    await _unitOfWork.ProductBillsRepository.Add(productBill);       
+                }
+
+                var productForProductBill = _productService.GetProductById(productBill.ProductId);
+                var productsPrice = _calculator.MultiplyOperation(productForProductBill.Price, productBill.ProductQuantity);
+                productBill.ProductsPrice = (int)productsPrice;
+                _billService.CalculateTotalBillPrice(productBill, "adds");
 
                 var result = _unitOfWork.Save();
-
-                if (result > 0)
+                if (result > 0) {                   
                     return true;
+                }                  
                 else
-                    return false;
+                    return false;              
             }           
 
         }
 
-        public async Task<bool> UpdateProductBill(ProductBill productBill)
+        public async Task<bool> DeleteProductBill(string billNumber, int productId)
         {
-            throw new NotImplementedException();
+            if (productId > 0 && billNumber != null)
+            {
+                var productBill = _unitOfWork.ProductBillsRepository.GetByProductAndBill(billNumber,productId);
+
+                if (productBill != null)
+                {
+                    _billService.CalculateTotalBillPrice(productBill, "subtract");
+                    _unitOfWork.ProductBillsRepository.Delete(productBill);
+                    var result = _unitOfWork.Save();
+                    
+                    if (result > 0) {                      
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        public bool IfProductBillExists(ProductBill productBill)
+        {
+            if (productBill != null)
+            {
+                var result = _unitOfWork.ProductBillsRepository.IfObjectExists(productBill);
+                return result;
+            }
+            return false;
         }
     }
 }

@@ -13,14 +13,14 @@ namespace CashRegister.Infrastructure.Repositories
             _cashRegisterDbContext = context;
         }
 
-        public async Task<T> GetById(int id)
+        public T GetById(int id)
         {
-            return await _cashRegisterDbContext.Set<T>().FindAsync(id);
+            return  _cashRegisterDbContext.Set<T>().Find(id);
         }
 
-        public async Task<T> GetByStringId(string id)
+        public T GetByStringId(string id)
         {
-            return await _cashRegisterDbContext.Set<T>().FindAsync(id);
+            return _cashRegisterDbContext.Set<T>().Find(id);
         }
 
         public async Task<IEnumerable<T>> GetAll()
@@ -59,5 +59,12 @@ namespace CashRegister.Infrastructure.Repositories
                 return true;
             return false;
         }
+
+        public bool IfObjectExists(T entity)
+        {
+            var result = _cashRegisterDbContext.Set<T>().Contains(entity);
+            return result;
+        }
+
     }
 }

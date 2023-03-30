@@ -1,21 +1,25 @@
-﻿namespace CashRegister.Application.Services
+﻿using System.Text.RegularExpressions;
+
+namespace CashRegister.Application.Services
 {
     public class ValidationService
     {
         public bool IsValidBillNumber(string billNumber)
         {
-            if (billNumber.Length < 18)
+            Regex regex = new Regex(@"^\d{3}-\d{13}-\d{2}$");
+            if (!regex.IsMatch(billNumber))
             {
                 return false;
             }
-            int controlNumber = Convert.ToInt32(billNumber.Substring(billNumber.Length - 2));
-            string billSubstring = billNumber.Substring(0, 16);
-            long numberBody = long.Parse(billSubstring);
-            if (98 - ((numberBody * 100) % 97) == controlNumber)
-            {
-                return true;
-            }
-            return false;
+
+            string identificationCode = billNumber.Substring(0, 3);
+            string billNum = billNumber.Substring(4, 13);
+            string controlNum = billNumber.Substring(18, 2);
+            string concatenatedNum = identificationCode + billNum;
+            long multipliedNum = long.Parse(concatenatedNum) * 100;
+            int controlCalc = 98 - (int)(multipliedNum % 97);
+            int controlNumInt = int.Parse(controlNum);
+            return controlCalc == controlNumInt;
         }
         public bool isValidCreditCard(string creditCard)
         {
@@ -53,7 +57,8 @@
         private bool ValidateCreditCard(string card)
         {
             var cardReverse = card.Reverse();
-            var reverseEveryOtherSecondToLast = new string(cardReverse.Where((ch, index) => index % 2 != 0).ToArray());
+            var reverseEveryOtherSecondToLast 
+                = new string(cardReverse.Where((ch, index) => index % 2 != 0).ToArray());
             string MultiplyDigitsByTwo = "";
             for (int i = 0; i < reverseEveryOtherSecondToLast.Length; i++)
             {

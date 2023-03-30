@@ -28,18 +28,21 @@ namespace CashRegister.API.Controllers
         {
             var query = new GetAllBillsQuery();
             var result = await _mediator.Send(query);
+            if(result.Count()==0)
+                return NotFound();
             return Ok(result);
         }
 
         [HttpGet("{billNumber}")]
-        public  IActionResult GetBillById(string billNumber)
+        public async Task<IActionResult> GetBillById(string billNumber)
         {
-            var bill = _billService.GetBillById(billNumber);
-            if (bill == null)
+            var query = new GetBillByIdQuery(billNumber);
+            var result = await _mediator.Send(query);
+            if (result == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<BillDTO>(bill));
+            return Ok(result);
         }
 
         [HttpPost]

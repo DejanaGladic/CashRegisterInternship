@@ -27,7 +27,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> DeleteProduct(int productId)
+        public bool DeleteProduct(int productId)
         {
             if (productId > 0)
             {
@@ -75,7 +75,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public bool UpdateProduct(Product product)
         {
             if (product != null)
             {

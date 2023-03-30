@@ -9,6 +9,19 @@ namespace CashRegister.Application.Services
            return initialValue + valueToAdd;
         }
 
+        public int moneyConversion(int price, string exChangeRate)
+        {
+            switch (exChangeRate)
+            {
+                case "EUR":
+                    return price / 118;
+                case "USD":
+                    return price / 107;
+                default:
+                    return price;
+            }
+        }
+
         public decimal MultiplyOperation(decimal initialValue, decimal multiplyWith) {
             return initialValue * multiplyWith;
         }

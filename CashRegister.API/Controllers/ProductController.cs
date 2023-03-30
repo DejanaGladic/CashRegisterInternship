@@ -61,11 +61,11 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(Product product)
+        public IActionResult UpdateProduct(Product product)
         {
             if (product != null)
             {
-                var isProductCreated = await _productService.UpdateProduct(product);
+                var isProductCreated = _productService.UpdateProduct(product);
                 if (isProductCreated)
                 {
                     return Ok(isProductCreated);
@@ -79,9 +79,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpDelete("{productId}")]
-        public async Task<IActionResult> DeleteProduct(int productId)
+        public IActionResult DeleteProduct(int productId)
         {
-            var isProductCreated = await _productService.DeleteProduct(productId);
+            var isProductCreated = _productService.DeleteProduct(productId);
 
             if (isProductCreated)
             {

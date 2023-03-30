@@ -5,5 +5,7 @@
         public decimal AdditionOperation(decimal initialValue, decimal valueToAdd);
         public decimal MultiplyOperation(decimal initialValue, decimal multiplyWith);
         public decimal SubstractOperation(int initialValue, decimal valueToSubstract);
+
+        public int moneyConversion(int price, string exChangeRate);
     }
 }

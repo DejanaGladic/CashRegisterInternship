@@ -8,10 +8,12 @@ namespace CashRegister.Application.Services
     {
         private IUnitOfWork _unitOfWork;
         private ICalculator _calculator;
-        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator)
+        private ValidationService _validationService;
+        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, ValidationService validationService)
         {
             _unitOfWork = unitOfWork;
             _calculator = calculator;
+            _validationService = validationService;
         }
         public async Task<bool> CreateBill(Bill bill)
         {
@@ -21,6 +23,12 @@ namespace CashRegister.Application.Services
                 if (ifBillExists != null) {
                     return false;
                 }
+
+                if(!_validationService.IsValidBillNumber(bill.BillNumber) || 
+                    !_validationService.isValidCreditCard(bill.CreditCardNumber)){               
+                    return false;
+                }
+
                 await _unitOfWork.BillRepository.Add(bill);
 
                 var result = _unitOfWork.Save();
@@ -33,7 +41,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> UpdateBill(Bill bill)
+        public bool UpdateBill(Bill bill)
         {
             if (bill != null)
             {
@@ -42,9 +50,13 @@ namespace CashRegister.Application.Services
 
                 if (returnedBill != null)
                 {
+                    if (!_validationService.IsValidBillNumber(bill.BillNumber) ||
+                        !_validationService.isValidCreditCard(bill.CreditCardNumber))
+                    {
+                        return false;
+                    }
                     returnedBill.BillNumber = bill.BillNumber;
                     returnedBill.PaymentMethod = bill.PaymentMethod;
-                    returnedBill.TotalPrice = bill.TotalPrice;
                     returnedBill.CreditCardNumber = bill.CreditCardNumber;
 
                     _unitOfWork.BillRepository.Update(returnedBill);
@@ -60,10 +72,15 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<bool> DeleteBill(string billNumber)
+        public bool DeleteBill(string billNumber)
         {
             if (billNumber != null)
             {
+                if (!_validationService.IsValidBillNumber(billNumber))
+                {
+                    return false;
+                }
+
                 var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {
@@ -110,16 +127,30 @@ namespace CashRegister.Application.Services
 
         public void CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation) {
 
-            var returnedProductBill = GetBillById(productBill.BillNumber);
-            var initialValue = returnedProductBill.TotalPrice;
+            var returnedBill = GetBillById(productBill.BillNumber);
+            var initialValue = returnedBill.TotalPrice;
             var value = productBill.ProductsPrice;
 
+            int calculatedTotalPrice = 0;
             if(typeOfCalculation == "adds")
-                returnedProductBill.TotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
+                calculatedTotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
             else if(typeOfCalculation == "subtract")
-                returnedProductBill.TotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
+                calculatedTotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
+
+            if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
+                returnedBill.TotalPrice = calculatedTotalPrice;
+            }
         }
 
+        public Bill GetBillExchangeRate(string billNumber, string exchangeRate)
+        {
+            var returnedProductBill = GetBillById(billNumber);
+            if (returnedProductBill == null)
+                return null;
 
+            var value = _calculator.moneyConversion(returnedProductBill.TotalPrice, exchangeRate);
+            returnedProductBill.TotalPrice = value;
+            return returnedProductBill;
+        }
     }
 }

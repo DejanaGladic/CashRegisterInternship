@@ -46,7 +46,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts()
         {
             var productsList = await _unitOfWork.ProductRepository.GetAll();
             return productsList;

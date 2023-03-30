@@ -8,8 +8,8 @@ namespace CashRegister.Application.Services
     {
         private IUnitOfWork _unitOfWork;
         private ICalculator _calculator;
-        private ValidationService _validationService;
-        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, ValidationService validationService)
+        private IValidationService _validationService;
+        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, IValidationService validationService)
         {
             _unitOfWork = unitOfWork;
             _calculator = calculator;
@@ -96,7 +96,7 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public async Task<IEnumerable<Bill>> GetAllBills()
+        public async Task<List<Bill>> GetAllBills()
         {
             var billLists = await _unitOfWork.BillRepository.GetAll();
             return billLists;

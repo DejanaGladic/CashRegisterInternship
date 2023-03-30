@@ -118,5 +118,6 @@ namespace CashRegister.Application.Services
             }
             return false;
         }
+
     }
 }

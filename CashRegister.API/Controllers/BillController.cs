@@ -3,6 +3,8 @@ using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Application.Services;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
+using CashRegister.Domain.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashRegister.API.Controllers
@@ -13,21 +15,20 @@ namespace CashRegister.API.Controllers
     {
         public IBillService _billService;
         public IMapper _mapper;
-        public BillController(IBillService billService, IMapper mapper)
+        private IMediator _mediator;
+        public BillController(IBillService billService, IMapper mapper, IMediator mediator)
         {
             _billService = billService;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBillList()
         {
-            var billList = await _billService.GetAllBills();
-            if (billList == null)
-            {
-                return NotFound();
-            }
-            return Ok(_mapper.Map<IEnumerable<BillDTO>>(billList));
+            var query = new GetAllBillsQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{billNumber}")]

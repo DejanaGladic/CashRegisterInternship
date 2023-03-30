@@ -7,7 +7,7 @@ namespace CashRegister.Application.ServiceInterfaces
         Task<bool> CreateBill(Bill bill);
         bool UpdateBill(Bill bill);
         bool DeleteBill(string billNumber);
-        Task<IEnumerable<Bill>> GetAllBills();
+        Task<List<Bill>> GetAllBills();
 
         Bill GetBillById(string billNumber);
 

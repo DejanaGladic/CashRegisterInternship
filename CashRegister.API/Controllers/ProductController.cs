@@ -26,7 +26,7 @@ namespace CashRegister.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IEnumerable<ProductDTO>>(productsList));
+            return Ok(_mapper.Map<List<ProductDTO>>(productsList));
         }
 
         [HttpGet("{productId}")]

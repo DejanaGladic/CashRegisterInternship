@@ -7,7 +7,7 @@
         bool IfObjectExists(T entity);
         bool IfExistsById(int id);
         bool IfExistsByStringId(string id);
-        Task<IEnumerable<T>> GetAll();
+        Task<List<T>> GetAll();
         Task Add(T entity);
         void Delete(T entity);
         void Update(T entity);

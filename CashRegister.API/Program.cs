@@ -5,6 +5,8 @@ using CashRegister.Domain.Interfaces;
 using CashRegister.Infrastructure.Repositories;
 using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Application.Services;
+using System.Reflection;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +36,7 @@ builder.Services.AddScoped<IBillRepository, BillRepository>();
 builder.Services.AddScoped<IProductBillRepository, ProductBillRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

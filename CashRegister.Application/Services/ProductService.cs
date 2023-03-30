@@ -11,40 +11,6 @@ namespace CashRegister.Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> CreateProduct(Product product)
-        {
-            if (product != null)
-            {
-                await _unitOfWork.ProductRepository.Add(product);
-
-                var result = _unitOfWork.Save();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
-
-        public bool DeleteProduct(int productId)
-        {
-            if (productId > 0)
-            {
-                var product = _unitOfWork.ProductRepository.GetById(productId);
-                if (product != null)
-                {
-                    _unitOfWork.ProductRepository.Delete(product);
-                    var result = _unitOfWork.Save();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-            return false;
-        }
 
         public async Task<List<Product>> GetAllProducts()
         {
@@ -71,30 +37,6 @@ namespace CashRegister.Application.Services
             {
                 var result = _unitOfWork.ProductRepository.IfExistsById(productId);
                 return result;
-            }
-            return false;
-        }
-
-        public bool UpdateProduct(Product product)
-        {
-            if (product != null)
-            {
-                //preuzimanje direktne reference na objekat koji menjamo
-                var returnedProduct = _unitOfWork.ProductRepository.GetById(product.Id);
-                if (returnedProduct != null)
-                {
-                    returnedProduct.Name = product.Name;
-                    returnedProduct.Price = product.Price;
-
-                    _unitOfWork.ProductRepository.Update(returnedProduct);
-
-                    var result = _unitOfWork.Save();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
             }
             return false;
         }

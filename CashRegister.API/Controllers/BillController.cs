@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using CashRegister.Application.ServiceInterfaces;
-using CashRegister.Application.Services;
+﻿using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
-using CashRegister.Domain.Models;
 using CashRegister.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +10,9 @@ namespace CashRegister.API.Controllers
     [ApiController]
     public class BillController : ControllerBase
     {
-        public IBillService _billService;
-        public IMapper _mapper;
         private IMediator _mediator;
-        public BillController(IBillService billService, IMapper mapper, IMediator mediator)
+        public BillController(IMediator mediator)
         {
-            _billService = billService;
-            _mapper = mapper;
             _mediator = mediator;
         }
 
@@ -28,79 +21,52 @@ namespace CashRegister.API.Controllers
         {
             var query = new GetAllBillsQuery();
             var result = await _mediator.Send(query);
-            return Ok(result);
+            return result.Count() != 0 ? Ok(result) : NotFound();
         }
 
         [HttpGet("{billNumber}")]
-        public  IActionResult GetBillById(string billNumber)
+        public async Task<IActionResult> GetBillById(string billNumber)
         {
-            var bill = _billService.GetBillById(billNumber);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-            return Ok(_mapper.Map<BillDTO>(bill));
+            var query = new GetBillByIdQuery(billNumber);
+            var result = await _mediator.Send(query);
+
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billPostPutDTO);
-            var isBillCreated = await _billService.CreateBill(bill);
+            var query = new CreateBillCommand(billPostPutDTO);
+            var result = await _mediator.Send(query);
 
-            if (isBillCreated)
-            {
-                return Created("/bill","Bill has been created");
-            }
-            else
-            {
-                return BadRequest("Bill has not been created");
-            }
+            return result ? Created("/bill", "Bill has been created") : BadRequest("Bill has not been created");
         }
 
         [HttpPut]
-        public IActionResult UpdateBill(BillPostPutDTO billPostPutDTO)
+        public async Task<IActionResult> UpdateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billPostPutDTO);
-            if (bill != null)
-            {
-                var isBillUpdated = _billService.UpdateBill(bill);
-                if (isBillUpdated)
-                {
-                    return Ok("Bill has been updated");
-                }
-                return BadRequest("Bill has not been updated");
-            }
-            else
-            {
-                return BadRequest();
-            }
+            var query = new UpdateBillCommand(billPostPutDTO);
+            var result = await _mediator.Send(query);
+
+            return result ? Ok("Bill has been updated") : BadRequest("Bill has not been updated");
         }
 
         [HttpDelete("{billNumber}")]
-        public IActionResult DeleteBill(string billNumber)
+        public async Task<IActionResult> DeleteBill(string billNumber)
         {
-            var isBillDeleted = _billService.DeleteBill(billNumber);
+            var query = new DeleteBillCommand(billNumber);
+            var result = await _mediator.Send(query);
 
-            if (isBillDeleted)
-            {
-                return Ok("Bill has been deleted");
-            }
-            else
-            {
-                return BadRequest("Bill has not been deleted");
-            }
+            return result ? Ok("Bill has been deleted") : BadRequest("Bill has not been deleted");
         }
 
         [HttpGet("{billNumber}/{exchangeRate}")]
-        public IActionResult GetBillExchangeRate(string billNumber, string exchangeRate)
+        public async Task<IActionResult> GetBillExchangeRate(string billNumber, string exchangeRate)
         {
-            var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-            return Ok(_mapper.Map<BillDTO>(bill));
+            var query = new GetBillExchangeRateQuery(billNumber, exchangeRate);
+            var result = await _mediator.Send(query);
+
+            return result != null ? Ok(result) : NotFound();
         }
     }
 }

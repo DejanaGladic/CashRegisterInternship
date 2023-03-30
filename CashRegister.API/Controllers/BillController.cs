@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ServiceInterfaces;
 using CashRegister.Application.Services;
+using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Models;
 using CashRegister.Domain.Queries;
@@ -43,17 +44,10 @@ namespace CashRegister.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBill(BillPostPutDTO billPostPutDTO)
         {
-            var bill = _mapper.Map<Bill>(billPostPutDTO);
-            var isBillCreated = await _billService.CreateBill(bill);
+            var query = new CreateBillCommand(billPostPutDTO);
+            var result = await _mediator.Send(query);
 
-            if (isBillCreated)
-            {
-                return Created("/bill","Bill has been created");
-            }
-            else
-            {
-                return BadRequest("Bill has not been created");
-            }
+            return result ? Created("/bill", "Bill has been created") : BadRequest("Bill has not been created");
         }
 
         [HttpPut]

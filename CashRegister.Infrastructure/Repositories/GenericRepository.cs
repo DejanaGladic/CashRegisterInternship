@@ -23,7 +23,7 @@ namespace CashRegister.Infrastructure.Repositories
             return _cashRegisterDbContext.Set<T>().Find(id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<List<T>> GetAll()
         {
             return await _cashRegisterDbContext.Set<T>().ToListAsync();
         }

@@ -5,7 +5,7 @@ namespace CashRegister.Application.ServiceInterfaces
     public interface IProductBillService
     {
         Task<bool> CreateProductBill(ProductBill _productBill);
-       // Task<bool> UpdateProductBill(ProductBill _productBill);
+        bool UpdateProductBill(ProductBill productBill, bool isFromCreation);
         bool IfProductBillExists(ProductBill _productBill);
         bool DeleteProductBill(string billNumber, int productId);
     }

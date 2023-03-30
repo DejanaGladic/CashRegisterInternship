@@ -10,6 +10,10 @@ namespace CashRegister.Domain.Mapper
         {
             CreateMap<ProductBillDTO, ProductBill>().ForMember(dest => dest.Product, opt => opt.Ignore())
                                             .ForMember(dest => dest.Bill, opt => opt.Ignore());
+
+            CreateMap<ProductBillPostPutDTO, ProductBill>().ForMember(dest => dest.Product, opt => opt.Ignore())
+                                            .ForMember(dest => dest.Bill, opt => opt.Ignore())
+                                            .ForMember(dest => dest.ProductsPrice, opt => opt.Ignore());
         }
     }
 }

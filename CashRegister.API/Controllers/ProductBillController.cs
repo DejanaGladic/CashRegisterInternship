@@ -20,9 +20,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductBill(ProductBillDTO productBillDTO)
+        public async Task<IActionResult> CreateProductBill(ProductBillPostPutDTO productBillPostPutDTO)
         {
-            var bill = _mapper.Map<ProductBill>(productBillDTO);
+            var bill = _mapper.Map<ProductBill>(productBillPostPutDTO);
             var isProductBillCreated = await _productBillService.CreateProductBill(bill);
 
             if (isProductBillCreated)

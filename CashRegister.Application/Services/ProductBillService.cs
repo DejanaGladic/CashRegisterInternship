@@ -10,7 +10,8 @@ namespace CashRegister.Application.Services
         private IProductService _productService;
         private IBillService _billService;
         private ICalculator _calculator;
-        public ProductBillService(IUnitOfWork unitOfWork, IProductService productService, IBillService billService, ICalculator calculator)
+        public ProductBillService(IUnitOfWork unitOfWork, IProductService productService, IBillService billService,
+            ICalculator calculator)
         {
             _unitOfWork = unitOfWork;
             _productService = productService;

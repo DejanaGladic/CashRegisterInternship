@@ -8,10 +8,12 @@ namespace CashRegister.Application.Services
     {
         private IUnitOfWork _unitOfWork;
         private ICalculator _calculator;
-        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator)
+        private ValidationService _validationService;
+        public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, ValidationService validationService)
         {
             _unitOfWork = unitOfWork;
             _calculator = calculator;
+            _validationService = validationService;
         }
         public async Task<bool> CreateBill(Bill bill)
         {
@@ -21,6 +23,11 @@ namespace CashRegister.Application.Services
                 if (ifBillExists != null) {
                     return false;
                 }
+
+                if(!_validationService.IsValidBillNumber(bill.BillNumber)){               
+                    return false;
+                }
+
                 await _unitOfWork.BillRepository.Add(bill);
 
                 var result = _unitOfWork.Save();
@@ -42,6 +49,10 @@ namespace CashRegister.Application.Services
 
                 if (returnedBill != null)
                 {
+                    if (!_validationService.IsValidBillNumber(bill.BillNumber))
+                    {
+                        return false;
+                    }
                     returnedBill.BillNumber = bill.BillNumber;
                     returnedBill.PaymentMethod = bill.PaymentMethod;
                     returnedBill.TotalPrice = bill.TotalPrice;
@@ -64,6 +75,11 @@ namespace CashRegister.Application.Services
         {
             if (billNumber != null)
             {
+                if (!_validationService.IsValidBillNumber(billNumber))
+                {
+                    return false;
+                }
+
                 var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {

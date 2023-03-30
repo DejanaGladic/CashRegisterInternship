@@ -25,6 +25,7 @@ builder.Services.AddDbContext < CashRegisterDBContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<ValidationService, ValidationService>();
 builder.Services.AddScoped<IProductBillService, ProductBillService>();
 builder.Services.AddScoped<ICalculator, Calculator>();
 

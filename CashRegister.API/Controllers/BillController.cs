@@ -28,9 +28,7 @@ namespace CashRegister.API.Controllers
         {
             var query = new GetAllBillsQuery();
             var result = await _mediator.Send(query);
-            if(result.Count()==0)
-                return NotFound();
-            return Ok(result);
+            return result.Count() != 0 ? Ok(result) : NotFound();
         }
 
         [HttpGet("{billNumber}")]
@@ -38,11 +36,8 @@ namespace CashRegister.API.Controllers
         {
             var query = new GetBillByIdQuery(billNumber);
             var result = await _mediator.Send(query);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpPost]

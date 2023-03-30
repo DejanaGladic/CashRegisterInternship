@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CashRegister.Application.ServiceInterfaces;
-using CashRegister.Domain.Commands;
+﻿using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
 using CashRegister.Domain.Queries;
 using MediatR;
@@ -12,13 +10,9 @@ namespace CashRegister.API.Controllers
     [ApiController]
     public class BillController : ControllerBase
     {
-        public IBillService _billService;
-        public IMapper _mapper;
         private IMediator _mediator;
-        public BillController(IBillService billService, IMapper mapper, IMediator mediator)
+        public BillController(IMediator mediator)
         {
-            _billService = billService;
-            _mapper = mapper;
             _mediator = mediator;
         }
 
@@ -73,13 +67,6 @@ namespace CashRegister.API.Controllers
             var result = await _mediator.Send(query);
 
             return result != null ? Ok(result) : NotFound();
-
-           /* var bill = _billService.GetBillExchangeRate(billNumber, exchangeRate);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-            return Ok(_mapper.Map<BillDTO>(bill));*/
         }
     }
 }

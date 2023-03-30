@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using CashRegister.Application.ServiceInterfaces;
+using System.Text.RegularExpressions;
 
 namespace CashRegister.Application.Services
 {
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
         const int _upperLimit = 50000;
         public bool IsValidBillNumber(string billNumber)

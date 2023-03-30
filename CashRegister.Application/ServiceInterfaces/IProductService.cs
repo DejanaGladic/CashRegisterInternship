@@ -8,7 +8,7 @@ namespace CashRegister.Application.ServiceInterfaces
 
         Task<IEnumerable<Product>> GetAllProducts();
 
-        Task<Product> GetProductById(int productId);
+        Product GetProductById(int productId);
         bool IfProductByIdExists(int productId);
 
         Task<bool> UpdateProduct(Product productDetails);

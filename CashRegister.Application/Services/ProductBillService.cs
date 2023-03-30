@@ -24,12 +24,25 @@ namespace CashRegister.Application.Services
 
             if (!ifProductExists || !ifBillExists)
                 return false;
-            else {          
-                await _unitOfWork.ProductBillsRepository.Add(productBill);
+            else {
 
-                var productsPrice = _calculator.MultiplyOperation(productBill.Product.Price, productBill.ProductQuantity);
+                if (_unitOfWork.ProductBillsRepository.IfObjectExists(productBill))
+                {
+                    var existingProductBill = _unitOfWork.ProductBillsRepository.GetByProductAndBill(productBill.BillNumber, productBill.ProductId);
+                    var calculatedQuantity = _calculator.AdditionOperation(existingProductBill.ProductQuantity, productBill.ProductQuantity);
+                    existingProductBill.ProductQuantity = (int)calculatedQuantity;
+                    _unitOfWork.ProductBillsRepository.Update(existingProductBill);
+
+                }
+                else {
+                    await _unitOfWork.ProductBillsRepository.Add(productBill);       
+                }
+
+                var productForProductBill = _productService.GetProductById(productBill.ProductId);
+                var productsPrice = _calculator.MultiplyOperation(productForProductBill.Price, productBill.ProductQuantity);
                 productBill.ProductsPrice = (int)productsPrice;
                 _billService.CalculateTotalBillPrice(productBill, "adds");
+
                 var result = _unitOfWork.Save();
                 if (result > 0) {                   
                     return true;
@@ -62,9 +75,14 @@ namespace CashRegister.Application.Services
             return false;
         }
 
-        public Task<bool> UpdateProductBill(ProductBill _productBill)
+        public bool IfProductBillExists(ProductBill productBill)
         {
-            throw new NotImplementedException();
+            if (productBill != null)
+            {
+                var result = _unitOfWork.ProductBillsRepository.IfObjectExists(productBill);
+                return result;
+            }
+            return false;
         }
     }
 }

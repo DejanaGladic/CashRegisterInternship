@@ -115,7 +115,7 @@ namespace CashRegister.Application.Services
             var value = productBill.ProductsPrice;
 
             if(typeOfCalculation == "adds")
-                productBill.Bill.TotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
+                returnedProductBill.TotalPrice = (int)_calculator.AdditionOperation(initialValue, value);
             else if(typeOfCalculation == "subtract")
                 returnedProductBill.TotalPrice = (int)_calculator.SubstractOperation(initialValue, value);
         }

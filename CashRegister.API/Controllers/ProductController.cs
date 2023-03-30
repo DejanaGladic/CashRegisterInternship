@@ -30,9 +30,9 @@ namespace CashRegister.API.Controllers
         }
 
         [HttpGet("{productId}")]
-        public async Task<IActionResult> GetProductById(int productId)
+        public  IActionResult GetProductById(int productId)
         {
-            var productById = await _productService.GetProductById(productId);
+            var productById = _productService.GetProductById(productId);
 
             if (productById != null)
             {

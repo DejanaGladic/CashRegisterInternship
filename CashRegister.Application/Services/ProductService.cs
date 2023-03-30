@@ -31,7 +31,7 @@ namespace CashRegister.Application.Services
         {
             if (productId > 0)
             {
-                var product = await _unitOfWork.ProductRepository.GetById(productId);
+                var product = _unitOfWork.ProductRepository.GetById(productId);
                 if (product != null)
                 {
                     _unitOfWork.ProductRepository.Delete(product);
@@ -52,11 +52,11 @@ namespace CashRegister.Application.Services
             return productsList;
         }
 
-        public async Task<Product> GetProductById(int productId)
+        public Product GetProductById(int productId)
         {
             if (productId > 0)
             {
-                var product = await _unitOfWork.ProductRepository.GetById(productId);
+                var product =  _unitOfWork.ProductRepository.GetById(productId);
                 if (product != null)
                 {
                     return product;
@@ -80,7 +80,7 @@ namespace CashRegister.Application.Services
             if (product != null)
             {
                 //preuzimanje direktne reference na objekat koji menjamo
-                var returnedProduct = await _unitOfWork.ProductRepository.GetById(product.Id);
+                var returnedProduct = _unitOfWork.ProductRepository.GetById(product.Id);
                 if (returnedProduct != null)
                 {
                     returnedProduct.Name = product.Name;

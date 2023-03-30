@@ -2,9 +2,9 @@
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> GetById(int id);
+        T GetById(int id);
         T GetByStringId(string id);
-
+        bool IfObjectExists(T entity);
         bool IfExistsById(int id);
         bool IfExistsByStringId(string id);
         Task<IEnumerable<T>> GetAll();

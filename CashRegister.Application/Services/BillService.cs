@@ -9,6 +9,10 @@ namespace CashRegister.Application.Services
         private IUnitOfWork _unitOfWork;
         private ICalculator _calculator;
         private IValidationService _validationService;
+
+        public BillService()
+        { }
+
         public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, IValidationService validationService)
         {
             _unitOfWork = unitOfWork;
@@ -16,16 +20,11 @@ namespace CashRegister.Application.Services
             _validationService = validationService;
         }
         public async Task<bool> CreateBill(Bill bill)
-        {
-            var ifBillExists = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
+        {   
             if (bill != null)
             {
+                var ifBillExists = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
                 if (ifBillExists != null) {
-                    return false;
-                }
-
-                if(!_validationService.IsValidBillNumber(bill.BillNumber) || 
-                    !_validationService.isValidCreditCard(bill.CreditCardNumber)){               
                     return false;
                 }
 
@@ -50,11 +49,6 @@ namespace CashRegister.Application.Services
 
                 if (returnedBill != null)
                 {
-                    if (!_validationService.IsValidBillNumber(bill.BillNumber) ||
-                        !_validationService.isValidCreditCard(bill.CreditCardNumber))
-                    {
-                        return false;
-                    }
                     returnedBill.BillNumber = bill.BillNumber;
                     returnedBill.PaymentMethod = bill.PaymentMethod;
                     returnedBill.CreditCardNumber = bill.CreditCardNumber;
@@ -76,11 +70,6 @@ namespace CashRegister.Application.Services
         {
             if (billNumber != null)
             {
-                if (!_validationService.IsValidBillNumber(billNumber))
-                {
-                    return false;
-                }
-
                 var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {
@@ -140,8 +129,8 @@ namespace CashRegister.Application.Services
             if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
                 returnedBill.TotalPrice = calculatedTotalPrice;
             }
-
             return returnedBill.TotalPrice;
+           
         }
 
         public Bill GetBillExchangeRate(string billNumber, string exchangeRate)
@@ -153,6 +142,10 @@ namespace CashRegister.Application.Services
             var value = _calculator.moneyConversion(returnedProductBill.TotalPrice, exchangeRate);
             returnedProductBill.TotalPrice = value;
             return returnedProductBill;
+        }
+
+        public void SetUnitOfWork(IUnitOfWork unitOfWork) { 
+            _unitOfWork = unitOfWork;
         }
     }
 }

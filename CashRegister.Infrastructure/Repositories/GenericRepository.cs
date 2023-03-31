@@ -30,7 +30,7 @@ namespace CashRegister.Infrastructure.Repositories
 
         public async Task Add(T entity)
         {
-            await _cashRegisterDbContext.Set<T>().AddAsync(entity);
+           await _cashRegisterDbContext.Set<T>().AddAsync(entity);
         }
 
         public void Delete(T entity)

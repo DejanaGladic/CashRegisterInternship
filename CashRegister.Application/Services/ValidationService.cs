@@ -1,29 +1,19 @@
 ﻿using CashRegister.Application.ServiceInterfaces;
-using System.Text.RegularExpressions;
 
 namespace CashRegister.Application.Services
 {
     public class ValidationService : IValidationService
     {
         const int _upperLimit = 50000;
-        public bool IsValidBillNumber(string billNumber)
-        {
-            Regex regex = new Regex(@"^\d{3}-\d{13}-\d{2}$");
-            if (!regex.IsMatch(billNumber))
-            {
-                return false;
-            }
 
-            string identificationCode = billNumber.Substring(0, 3);
-            string billNum = billNumber.Substring(4, 13);
-            string controlNum = billNumber.Substring(18, 2);
-            string concatenatedNum = identificationCode + billNum;
-            long multipliedNum = long.Parse(concatenatedNum) * 100;
-            int controlCalc = 98 - (int)(multipliedNum % 97);
-            int controlNumInt = int.Parse(controlNum);
-            return controlCalc == controlNumInt;
+        public bool IsUpperLimitOverDrawn(int upperLimit)
+        {
+            if (upperLimit > _upperLimit)
+                return true;
+            return false;
         }
-        public bool isValidCreditCard(string creditCard)
+        //ove metode su za validaciju kartice ali to smo uradili pomocu FluentValidatora
+        /*public bool isValidCreditCard(string creditCard)
         {
             bool isValid = true;
             if (creditCard == null)
@@ -85,12 +75,8 @@ namespace CashRegister.Application.Services
             int endResult = result + multipliedDigitsSummed;
             bool isValidCard = endResult % 10 == 0;
             return isValidCard;
-        }
+        }*/
 
-        public bool IsUpperLimitOverDrawn(int upperLimit) { 
-            if(upperLimit > _upperLimit)
-                return true;
-            return false;
-        }
+
     }
 }

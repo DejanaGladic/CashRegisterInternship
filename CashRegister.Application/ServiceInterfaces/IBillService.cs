@@ -1,4 +1,5 @@
-﻿using CashRegister.Domain.Models;
+﻿using CashRegister.Domain.Interfaces;
+using CashRegister.Domain.Models;
 
 namespace CashRegister.Application.ServiceInterfaces
 {
@@ -16,5 +17,8 @@ namespace CashRegister.Application.ServiceInterfaces
         bool IfBillByIdExists(string billNumber);
 
         int CalculateTotalBillPrice(ProductBill productBill, string typeOfCalculation);
+
+        void SetUnitOfWork(IUnitOfWork unitOfWork);
+
     }
 }

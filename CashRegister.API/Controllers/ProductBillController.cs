@@ -13,13 +13,6 @@ namespace CashRegister.API.Controllers
     [ApiController]
     public class ProductBillController : ControllerBase
     {
-       /* public IProductBillService _productBillService;
-        public IMapper _mapper;
-        public ProductBillController(IProductBillService productBillService, IMapper mapper)
-        {
-            _productBillService = productBillService;
-            _mapper = mapper;
-        }*/
 
         private IMediator _mediator;
         public ProductBillController(IMediator mediator)
@@ -30,6 +23,10 @@ namespace CashRegister.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProductBill(ProductBillPostPutDTO productBillPostPutDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var query = new CreateProductBillCommand(productBillPostPutDTO);
             var result = await _mediator.Send(query);
 

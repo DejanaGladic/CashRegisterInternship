@@ -9,6 +9,10 @@ namespace CashRegister.Application.Services
         private IUnitOfWork _unitOfWork;
         private ICalculator _calculator;
         private IValidationService _validationService;
+
+        public BillService()
+        { }
+
         public BillService(IUnitOfWork unitOfWork, ICalculator  calculator, IValidationService validationService)
         {
             _unitOfWork = unitOfWork;
@@ -16,10 +20,10 @@ namespace CashRegister.Application.Services
             _validationService = validationService;
         }
         public async Task<bool> CreateBill(Bill bill)
-        {
-            var ifBillExists = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
+        {   
             if (bill != null)
             {
+                var ifBillExists = _unitOfWork.BillRepository.GetByStringId(bill.BillNumber);
                 if (ifBillExists != null) {
                     return false;
                 }
@@ -138,6 +142,10 @@ namespace CashRegister.Application.Services
             var value = _calculator.moneyConversion(returnedProductBill.TotalPrice, exchangeRate);
             returnedProductBill.TotalPrice = value;
             return returnedProductBill;
+        }
+
+        public void SetUnitOfWork(IUnitOfWork unitOfWork) { 
+            _unitOfWork = unitOfWork;
         }
     }
 }

@@ -24,11 +24,6 @@ namespace CashRegister.Application.Services
                     return false;
                 }
 
-                if(!_validationService.IsValidBillNumber(bill.BillNumber) || 
-                    !_validationService.isValidCreditCard(bill.CreditCardNumber)){               
-                    return false;
-                }
-
                 await _unitOfWork.BillRepository.Add(bill);
 
                 var result = _unitOfWork.Save();
@@ -50,11 +45,6 @@ namespace CashRegister.Application.Services
 
                 if (returnedBill != null)
                 {
-                    if (!_validationService.IsValidBillNumber(bill.BillNumber) ||
-                        !_validationService.isValidCreditCard(bill.CreditCardNumber))
-                    {
-                        return false;
-                    }
                     returnedBill.BillNumber = bill.BillNumber;
                     returnedBill.PaymentMethod = bill.PaymentMethod;
                     returnedBill.CreditCardNumber = bill.CreditCardNumber;
@@ -76,11 +66,6 @@ namespace CashRegister.Application.Services
         {
             if (billNumber != null)
             {
-                if (!_validationService.IsValidBillNumber(billNumber))
-                {
-                    return false;
-                }
-
                 var bill = _unitOfWork.BillRepository.GetByStringId(billNumber);
                 if (bill != null)
                 {
@@ -140,8 +125,8 @@ namespace CashRegister.Application.Services
             if (!_validationService.IsUpperLimitOverDrawn(calculatedTotalPrice)) {
                 returnedBill.TotalPrice = calculatedTotalPrice;
             }
-
             return returnedBill.TotalPrice;
+           
         }
 
         public Bill GetBillExchangeRate(string billNumber, string exchangeRate)

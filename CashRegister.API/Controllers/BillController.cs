@@ -36,6 +36,11 @@ namespace CashRegister.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBill(BillPostPutDTO billPostPutDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var query = new CreateBillCommand(billPostPutDTO);
             var result = await _mediator.Send(query);
 
@@ -45,6 +50,10 @@ namespace CashRegister.API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateBill(BillPostPutDTO billPostPutDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var query = new UpdateBillCommand(billPostPutDTO);
             var result = await _mediator.Send(query);
 

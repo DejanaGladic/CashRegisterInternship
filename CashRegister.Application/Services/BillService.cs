@@ -135,7 +135,7 @@ namespace CashRegister.Application.Services
 
         public Bill GetBillExchangeRate(string billNumber, string exchangeRate)
         {
-            var returnedProductBill = GetBillById(billNumber);
+            var returnedProductBill = _unitOfWork.BillRepository.GetByStringId(billNumber);
             if (returnedProductBill == null)
                 return null;
 
@@ -146,6 +146,11 @@ namespace CashRegister.Application.Services
 
         public void SetUnitOfWork(IUnitOfWork unitOfWork) { 
             _unitOfWork = unitOfWork;
+        }
+
+        public void SetCalculator(ICalculator calculator)
+        {
+            _calculator = calculator;
         }
     }
 }

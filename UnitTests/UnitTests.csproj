@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CashRegister.API\CashRegister.API.csproj" />
     <ProjectReference Include="..\CashRegister.Application\CashRegister.Application.csproj" />
   </ItemGroup>
 

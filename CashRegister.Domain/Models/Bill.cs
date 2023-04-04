@@ -12,6 +12,7 @@ namespace CashRegister.Domain.Models
         public string CreditCardNumber { get; set; }
         public List<ProductBill> ProductBills { get; set; }
 
+
         public Bill(string billNumber, string paymentMethod, int totalPrice, string creditCardNumber)
         {
             BillNumber = billNumber;
@@ -20,6 +21,8 @@ namespace CashRegister.Domain.Models
             CreditCardNumber = creditCardNumber;
         }
 
-
+        public Bill()
+        {
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using CashRegister.Domain.Commands;
+﻿using CashRegister.API.Validators;
+using CashRegister.Domain.Commands;
 using CashRegister.Domain.DTO;
+using CashRegister.Domain.Models;
 using CashRegister.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -40,9 +42,8 @@ namespace CashRegister.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var query = new CreateBillCommand(billPostPutDTO);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, default);
 
             return result ? Created("/bill", "Bill has been created") : BadRequest("Bill has not been created");
         }
